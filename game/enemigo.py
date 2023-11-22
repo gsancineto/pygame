@@ -5,7 +5,14 @@ import pygame
 class Enemigo(Personaje):
     def __init__(self, animaciones, posicion, tamaño, velocidad, estado="idle"):
         super().__init__(animaciones, posicion, tamaño, velocidad, estado)
+        self.flag_direccion = "R"
 
-    def avanzar(self, direccion):
-        self.rect.x += self.velocidad * direccion
-        self.estado = "run"
+    def desplazar(self):
+        if self.rect.x >= 298 and self.flag_direccion == "R":
+            self.rect.x -= self.velocidad
+        elif self.rect.x >= 290 and self.flag_direccion == "R":
+            self.flag_direccion = "L"
+        elif self.rect.x <= 420 and self.flag_direccion == "L":
+            self.rect.x += self.velocidad
+        else:
+            self.flag_direccion = "R"
