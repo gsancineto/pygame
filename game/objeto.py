@@ -27,3 +27,6 @@ class Objeto:
     def update(self, screen):
         self.animacion_actual = self.animaciones[self.estado]
         self.animar(screen)
+
+    def reset(self):
+        self.tomado = False

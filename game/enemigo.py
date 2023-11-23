@@ -21,3 +21,9 @@ class Enemigo(Personaje):
     def morir(self):
         self.estado = "dead"
         self.muerto = True
+        self.rect.x = 900
+
+    def reset(self, map):
+        self.muerto = False
+        self.estado = "run"
+        self.rect.x = map.enemy_start_x

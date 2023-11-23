@@ -25,3 +25,7 @@ class Jugador(Personaje):
         elif cofre.tomado and not self.banderas["cofre"]:
             self.score += 50
             self.banderas["cofre"] = True
+
+    def morir(self,map):
+        self.score -= 10
+        self.rect.x, self.rect.y = map.start_x, map.start_y

@@ -51,6 +51,8 @@ class TileMap():
                     self.key_x, self.key_y = x* self.title_size, y * self.title_size
                 elif tile == "C":
                     self.chest_x, self.chest_y = x* self.title_size, y * self.title_size
+                elif tile =="E":
+                    self.enemy_start_x, self.enemy_start_y = x* self.title_size, y* self.title_size
                 elif tile != '-1':
                     tiles.append(Tile(f"{TILES_TERRAIN_URI}/{tile}.png", x * self.title_size, y * self.title_size))
                 x += 1

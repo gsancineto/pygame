@@ -7,3 +7,7 @@ class Cofre(Objeto):
     def abrir(self):
         if self.tomado:
             self.estado = "unlocked"
+
+    def reset(self):
+        self.tomado = False
+        self.estado = "locked"
