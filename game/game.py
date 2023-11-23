@@ -6,7 +6,7 @@ from jugador import Jugador
 from enemigo import Enemigo
 from llave import Llave
 from cofre import Cofre
-import math
+from level import Level
 
 pygame.init()
 screen = pygame.display.set_mode(SCREEN_SIZE)
@@ -15,7 +15,9 @@ running = True
 bg_image = pygame.image.load(BG_URI)
 bg_rect = bg_image.get_rect()
 
-map = TileMap('./game/assets/level_1.csv')
+nivel = 1
+level = Level(nivel)
+map = level.iniciar_nivel()
 diccionario_animaciones_jugador = load_anim_dictionary(PLAYER_URI)
 diccionario_animaciones_enemigo = load_anim_dictionary(ENEMY_URI)
 diccionario_animaciones_llave = load_anim_dictionary(LLAVE_URI,["idle"])
@@ -51,6 +53,7 @@ while running:
 
     screen.blit(bg_image, bg_rect)
     map.draw_map(screen)
+    mostrar_score(player,screen)
     player.abrir_cofre(cofre,llave)
     cofre.abrir()
     cofre.update(screen)
@@ -59,10 +62,16 @@ while running:
     player.tomar_llave(llave)
     llave.update(screen)
     if player.check_colisiones(enemigo) == 1:
-        enemigo.estado = "dead"
+        enemigo.morir()
     elif player.check_colisiones(enemigo) == -1:
         player.estado = "dead"
-    
+    player.aumentar_score(enemigo,llave,cofre)
+    #reset
+
+    # if cofre.tomado:
+    #     nivel += 1
+    #     level = Level(nivel)
+    #     map = level.iniciar_nivel()
     pygame.display.flip()
 
 pygame.quit()

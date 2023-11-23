@@ -32,3 +32,8 @@ def girar_imagenes(lista_original, flip_x, flip_y):
         lista_girada.append(pygame.transform.flip(imagen, flip_x, flip_y))
     
     return lista_girada
+
+def mostrar_score(jugador, screen):
+    font = pygame.font.SysFont(GAME_FONT,24)
+    text = font.render(str(jugador.score),True,COLOR_FONT)
+    screen.blit(text,(750,50))

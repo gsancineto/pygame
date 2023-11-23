@@ -6,6 +6,7 @@ class Enemigo(Personaje):
     def __init__(self, animaciones, posicion, tamaño, velocidad, estado="idle"):
         super().__init__(animaciones, posicion, tamaño, velocidad, estado)
         self.flag_direccion = "R"
+        self.muerto = False
 
     def desplazar(self):
         if self.rect.x >= 298 and self.flag_direccion == "R":
@@ -16,3 +17,7 @@ class Enemigo(Personaje):
             self.rect.x += self.velocidad
         else:
             self.flag_direccion = "R"
+
+    def morir(self):
+        self.estado = "dead"
+        self.muerto = True
