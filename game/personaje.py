@@ -1,7 +1,8 @@
 from utils.config import *
+from sonido import Sonido
 
 class Personaje:
-    def __init__(self, animaciones, posicion, tamaño, velocidad, estado="idle"):
+    def __init__(self, animaciones, posicion, tamaño, velocidad, estado="idle", limites=False):
         self.animaciones = animaciones
         reescalar_imagenes(self.animaciones, tamaño)
         self.rect = pygame.Rect(*posicion, *tamaño)
@@ -14,6 +15,7 @@ class Personaje:
         self.contador_pasos = 0
         self.animacion_actual = self.animaciones[estado]
         self.direccion = 1 #1 = derecha, -1 = izquierda
+        self.animacion_mirando = "right"
 
         self.gravedad = 1
         self.desplazamiento_y = 0
@@ -21,11 +23,17 @@ class Personaje:
         self.limite_velocidad_salto = 12
         self.esta_saltando = False
 
+        self.muerto = False
+        self.vacio_mapa = pygame.rect.Rect(-800,650,SCREEN_WIDTH*3, 1)
+        self.sonido = Sonido()
+
     def desplazar(self):
         self.rect.x += self.velocidad * self.direccion
+        self.sonido.reproducir_efecto("correr")
 
     def aplicar_gravedad(self, screen, map):
         if self.esta_saltando:
+            self.sonido.reproducir_efecto("saltar")
             self.animar(screen)
             self.rect.y += self.desplazamiento_y
             if self.desplazamiento_y + self.gravedad < self.limite_velocidad_salto:
@@ -65,14 +73,10 @@ class Personaje:
 
     def draw(self,screen):
         self.calculate_hitbox()
-        if self.direccion == -1:
+        if self.direccion == -1 and self.animacion_mirando == "right":
             self.animaciones[self.estado] = girar_imagenes(self.animaciones[self.estado], True,False)
+            self.animacion_mirando = "left"
         screen.blit(self.animacion_actual[int(self.contador_pasos)], self.rect)
-        pygame.draw.rect(screen,"green",self.rect,3)
-        pygame.draw.rect(screen,"magenta",self.hitbox["top"],3)
-        pygame.draw.rect(screen,"blue",self.hitbox["bot"],3)
-        pygame.draw.rect(screen,"yellow",self.hitbox["left"],3)
-        pygame.draw.rect(screen,"orange",self.hitbox["right"],3)
 
     def calculate_hitbox(self):
         rect = self.rect
@@ -82,9 +86,7 @@ class Personaje:
         right = pygame.Rect((rect.x + rect.width - 10), rect.y+2, 12, rect.height-4)
         hitbox = {"left": left, "right": right, "top": top, "bot": bot}
         self.hitbox = hitbox
-
-    def check_colisiones(self, enemigo):
-        if self.hitbox["bot"].colliderect(enemigo.hitbox["top"]):
-            return 1
-        elif self.rect.colliderect(enemigo.rect):
-            return -1
+ 
+    def morir(self):
+        self.estado = "dead"
+        self.muerto = True

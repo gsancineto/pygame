@@ -1,31 +1,60 @@
 from personaje import Personaje
+from sonido import Sonido
 
 class Jugador(Personaje):
     def __init__(self, animaciones, posicion, tamaño, velocidad, estado="idle"):
         super().__init__(animaciones, posicion, tamaño, velocidad, estado)
         self.score = 0
         self.banderas = { "llave": False, "cofre": False, "enemigo": False }
+        self.vidas = 3
+        self.sonido = Sonido()
 
     def tomar_llave(self, llave):
         if self.rect.colliderect(llave.rect):
             llave.tomado = True
+            self.sonido.reproducir_efecto("llave")
 
     def abrir_cofre(self,cofre,llave):
         if llave.tomado:
             if self.rect.colliderect(cofre.rect):
                 cofre.tomado = True
+                self.sonido.reproducir_efecto("cofre")
+                self.sonido.reproducir_efecto("cofre_2")
 
-    def aumentar_score(self,enemigo,llave,cofre):
+    def aumentar_score(self,enemigo,cofre):
         if enemigo.muerto and not self.banderas["enemigo"]:
             self.score += 30
             self.banderas["enemigo"] = True
-        elif llave.tomado and not self.banderas["llave"]:
-            self.score += 10
-            self.banderas["llave"] = True
         elif cofre.tomado and not self.banderas["cofre"]:
             self.score += 50
             self.banderas["cofre"] = True
 
-    def morir(self,map):
-        self.score -= 10
+    def morir(self, map):
+        self.sonido.reproducir_efecto("morir")
+        self.estado = "dead"
+        if self.vidas > 1:
+            self.vidas -= 1
+            self.reset(map)
+        else:
+            self.muerto = True
+        
+    def reset(self,map):
         self.rect.x, self.rect.y = map.start_x, map.start_y
+        
+
+    def nuevo_juego(self,map):
+        self.reset(map)
+        self.vidas = 3
+        self.muerto = False
+        return 1
+
+    def proximo_nivel(self,map):
+        self.banderas = { "llave": False, "cofre": False, "enemigo": False }
+        self.reset(map)
+
+    def check_colisiones(self, enemigo, map):
+        if self.hitbox["bot"].colliderect(enemigo.hitbox["top"]):
+            enemigo.morir()
+            self.sonido.reproducir_efecto("matar")
+        elif (self.rect.colliderect(enemigo.rect) and not enemigo.muerto) or self.rect.colliderect(self.vacio_mapa):
+            self.morir(map)

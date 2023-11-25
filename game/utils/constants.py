@@ -9,6 +9,17 @@ ENEMY_URI = './game/assets/characters/enemy'
 LLAVE_URI = './game/assets/objects/key'
 COFRE_URI = './game/assets/objects/chest'
 SCORES_URI = './game/assets/scores.json'
+MUSIC_URI = './game/assets/sounds/musica.wav'
+PLAYER_SOUNDS_BASE_URI = './game/assets/sounds/player'
+PLAYER_SOUNDS_URI = {
+    "morir": f"{PLAYER_SOUNDS_BASE_URI}/morir.mp3", 
+    "saltar": f"{PLAYER_SOUNDS_BASE_URI}/saltar.mp3", 
+    "correr": f"{PLAYER_SOUNDS_BASE_URI}/correr.mp3", 
+    "matar": f"{PLAYER_SOUNDS_BASE_URI}/matar.mp3",
+    "llave": f"{PLAYER_SOUNDS_BASE_URI}/llave.mp3",
+    "cofre": f"{PLAYER_SOUNDS_BASE_URI}/cofre.mp3",
+    "cofre_2": f"{PLAYER_SOUNDS_BASE_URI}/cofre_2.mp3",
+    }
 
 TARGET_FPS = 60
 GAME_FONT = "Cambria"

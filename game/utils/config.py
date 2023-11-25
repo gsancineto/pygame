@@ -38,6 +38,9 @@ def mostrar_score(jugador, screen):
     text = font.render(str(jugador.score),True,COLOR_FONT)
     screen.blit(text,(750,50))
 
+    text_vidas = font.render(str(jugador.vidas), True, COLOR_FONT)
+    screen.blit(text_vidas,(50,50))
+
 def load_bg(screen):
     bg_image = pygame.image.load(BG_URI)
     bg_rect = bg_image.get_rect()
@@ -85,7 +88,7 @@ def leer_archivo(nombre_archivo:str):
     except:
         return False
     
-def leer_json(nombre_archivo):
+def leer_json(nombre_archivo) -> json:
     lectura = leer_archivo(nombre_archivo)
     if lectura:
         try:
@@ -105,11 +108,10 @@ def guardar_archivo(nombre_archivo:str, contenido:str):
         print("Error al crear el archivo: " + nombre_archivo)
         return False
 
-def generar_json(nombre_archivo, lista_superheroes, nombre_lista):
-    if not lista_superheroes:
+def generar_json(nombre_archivo, objeto_json):
+    if not objeto_json:
         return False
     
-    texto_json = {nombre_lista: lista_superheroes}
-    texto_json = json.dumps(texto_json,indent=4)
+    texto_json = json.dumps(objeto_json,indent=4)
     
     guardar_archivo(nombre_archivo,texto_json)

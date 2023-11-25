@@ -11,7 +11,7 @@ class Tile(pygame.sprite.Sprite):
     def draw(self, surface):
         surface.blit(self.image, (self.rect.x, self.rect.y))
 
-
+    
 class TileMap():
     def __init__(self, filename):
         self.title_size = 32
@@ -27,7 +27,6 @@ class TileMap():
     def load_map(self):
         for tile in self.tiles:
             tile.draw(self.map_surface)
-            pygame.draw.rect(self.map_surface,"red",tile.rect,3)
 
     def read_csv(self, filename):
         map = []
