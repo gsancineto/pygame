@@ -11,7 +11,6 @@ from inicio import Inicio
 from sonido import Sonido
 
 pygame.init()
-pygame.mixer.init()
 screen = pygame.display.set_mode(SCREEN_SIZE)
 clock = pygame.time.Clock()
 running = True
@@ -37,31 +36,44 @@ enemigo = Enemigo(diccionario_animaciones_enemigo,(map.enemy_start_x,map.enemy_s
 llave = Llave(diccionario_animaciones_llave,(map.key_x,map.key_y),(40,40))
 cofre = Cofre(diccionario_animaciones_cofre,(map.chest_x,map.chest_y),(40,40),"locked")
 
+sonido_correr_timer = 0
+
 vidas = player.vidas
 puntaje = player.score
 while running:
     dt = clock.tick(30) * .001 * TARGET_FPS
+
+    if sonido_correr_timer > 0:
+        sonido_correr_timer -=1
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
         if event.type == pygame.MOUSEBUTTONDOWN and stage != "play":
             stage = inicio.select_opcion(pygame.mouse.get_pos())
+            sonido.reproducir_efecto("llave")
         
         teclas = pygame.key.get_pressed()
 
         if teclas[pygame.K_RIGHT]:
             player.estado = "run"
             player.direccion = 1
+            if not player.esta_saltando and stage == "play":
+                sonido_correr(sonido_correr_timer,sonido)
         elif teclas[pygame.K_LEFT]:
             player.estado = "run"
             player.direccion = -1
+            if not player.esta_saltando and stage == "play":
+                sonido_correr(sonido_correr_timer,sonido)
         else:
             player.estado = "idle"
         
         if teclas[pygame.K_SPACE]:
             player.estado = "jump"
             stage = "play"
+            if not player.esta_saltando:
+                sonido.reproducir_efecto("saltar")
 
     if stage == "inicio":
         nivel = player.nuevo_juego(map)
@@ -90,7 +102,6 @@ while running:
         puntaje = player.score
 
         if cofre.tomado:
-            print(nivel)
             nivel += 1
             if nivel == 4:
                 player.muerto = True

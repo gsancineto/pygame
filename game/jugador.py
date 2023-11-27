@@ -10,15 +10,15 @@ class Jugador(Personaje):
         self.sonido = Sonido()
 
     def tomar_llave(self, llave):
-        if self.rect.colliderect(llave.rect):
+        if self.rect.colliderect(llave.rect) and not llave.tomado:
             llave.tomado = True
             self.sonido.reproducir_efecto("llave")
 
     def abrir_cofre(self,cofre,llave):
         if llave.tomado:
-            if self.rect.colliderect(cofre.rect):
+            if self.rect.colliderect(cofre.rect) and not cofre.tomado:
                 cofre.tomado = True
-                self.sonido.reproducir_efecto("cofre")
+                # self.sonido.reproducir_efecto("cofre")
                 self.sonido.reproducir_efecto("cofre_2")
 
     def aumentar_score(self,enemigo,cofre):
@@ -54,7 +54,8 @@ class Jugador(Personaje):
 
     def check_colisiones(self, enemigo, map):
         if self.hitbox["bot"].colliderect(enemigo.hitbox["top"]):
+            if not enemigo.muerto:
+                self.sonido.reproducir_efecto("matar")
             enemigo.morir()
-            self.sonido.reproducir_efecto("matar")
         elif (self.rect.colliderect(enemigo.rect) and not enemigo.muerto) or self.rect.colliderect(self.vacio_mapa):
             self.morir(map)

@@ -15,7 +15,7 @@ class Personaje:
         self.contador_pasos = 0
         self.animacion_actual = self.animaciones[estado]
         self.direccion = 1 #1 = derecha, -1 = izquierda
-        self.animacion_mirando = "right"
+        self.animacion_actual_flip = girar_imagenes(self.animaciones[estado],True,False)
 
         self.gravedad = 1
         self.desplazamiento_y = 0
@@ -29,11 +29,9 @@ class Personaje:
 
     def desplazar(self):
         self.rect.x += self.velocidad * self.direccion
-        self.sonido.reproducir_efecto("correr")
 
     def aplicar_gravedad(self, screen, map):
         if self.esta_saltando:
-            self.sonido.reproducir_efecto("saltar")
             self.animar(screen)
             self.rect.y += self.desplazamiento_y
             if self.desplazamiento_y + self.gravedad < self.limite_velocidad_salto:
@@ -53,13 +51,16 @@ class Personaje:
         largo = len(self.animacion_actual)
         if self.contador_pasos >= largo:
             self.contador_pasos = 0
-
+        
         self.draw(screen)
         self.contador_pasos += 0.3
 
     def update(self, screen, map):
         if not self.esta_saltando:
-            self.animacion_actual = self.animaciones[self.estado]
+            if self.direccion == 1:
+                self.animacion_actual = self.animaciones[self.estado]
+            else:
+                self.animacion_actual = self.animacion_actual_flip
             self.animar(screen)
 
         if self.estado == "run":
@@ -73,9 +74,6 @@ class Personaje:
 
     def draw(self,screen):
         self.calculate_hitbox()
-        if self.direccion == -1 and self.animacion_mirando == "right":
-            self.animaciones[self.estado] = girar_imagenes(self.animaciones[self.estado], True,False)
-            self.animacion_mirando = "left"
         screen.blit(self.animacion_actual[int(self.contador_pasos)], self.rect)
 
     def calculate_hitbox(self):

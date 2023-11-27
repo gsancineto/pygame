@@ -115,3 +115,8 @@ def generar_json(nombre_archivo, objeto_json):
     texto_json = json.dumps(objeto_json,indent=4)
     
     guardar_archivo(nombre_archivo,texto_json)
+
+def sonido_correr(timer,sonido):
+    if timer == 0:
+        timer = 20
+        sonido.reproducir_efecto("correr")

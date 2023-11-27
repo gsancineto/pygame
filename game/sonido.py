@@ -2,13 +2,14 @@ import pygame
 from utils.constants import *
 
 class Sonido:
-    def __init__(self) -> None:
-        pass
+    def __init__(self):
+        pygame.mixer.init()
+        pygame.mixer.set_num_channels(64)
 
     def reproducir_efecto(self,sonido):
-        pista = pygame.mixer.Sound(PLAYER_SOUNDS_URI[sonido])
-        pygame.mixer.Sound.play(pista)
-        pygame.mixer.Sound.set_volume(0.2)
+        efecto = pygame.mixer.Sound(PLAYER_SOUNDS_URI[sonido])
+        efecto.play()
+        efecto.set_volume(0.2)
 
     def reproducir_musica(self):
         pygame.mixer.music.load(MUSIC_URI)
