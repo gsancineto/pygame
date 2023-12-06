@@ -1,34 +1,18 @@
 [
     {
-        "name": "piratuli_1",
-        "score": 270
-    },
-    {
         "name": "piratuli_3",
-        "score": 270
-    },
-    {
-        "name": "piratuli_6",
-        "score": 270
-    },
-    {
-        "name": "piratuli_7",
-        "score": 270
-    },
-    {
-        "name": "piratuli_4",
-        "score": 250
+        "score": 330
     },
     {
         "name": "piratuli_0",
-        "score": 170
-    },
-    {
-        "name": "piratuli_5",
-        "score": 110
+        "score": 320
     },
     {
         "name": "piratuli_2",
-        "score": 10
+        "score": 320
+    },
+    {
+        "name": "piratuli_1",
+        "score": 150
     }
 ]

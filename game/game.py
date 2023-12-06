@@ -32,7 +32,9 @@ diccionario_animaciones_llave = load_anim_dictionary(LLAVE_URI,["idle"])
 diccionario_animaciones_cofre = load_anim_dictionary(COFRE_URI,["locked","unlocked"])
 
 player = Jugador(diccionario_animaciones_jugador,(map.start_x,map.start_y - 10),(40,40),7)
-enemigo = Enemigo(diccionario_animaciones_enemigo,(map.enemy_start_x,map.enemy_start_y),(75,50),3, "run",(map.enemy_start_x-30,map.enemy_start_x+80))
+enemigos = []
+for enemigo_start in map.enemies_start:
+    enemigos.append(Enemigo(diccionario_animaciones_enemigo,(enemigo_start),(75,50),3, "run",(enemigo_start[0]-ENEMY_RANGE,enemigo_start[0]+ENEMY_RANGE)))
 llave = Llave(diccionario_animaciones_llave,(map.key_x,map.key_y),(40,40))
 cofre = Cofre(diccionario_animaciones_cofre,(map.chest_x,map.chest_y),(40,40),"locked")
 
@@ -88,12 +90,13 @@ while running:
         cofre.abrir()
         cofre.update(screen)
         player.update(screen, map)
-        enemigo.update(screen,map)
+        for enemigo in enemigos:
+            enemigo.update(screen,map)
         player.tomar_llave(llave)
         llave.update(screen)
 
-        player.check_colisiones(enemigo,map)
-        player.aumentar_score(enemigo,cofre)
+        player.check_colisiones(enemigos,map)
+        player.aumentar_score(enemigos,cofre)
 
         if player.muerto:
             stage = inicio.set_score(player)
@@ -111,13 +114,13 @@ while running:
                 map = level.iniciar_nivel()
                 cofre.reset()
                 llave.reset()
-                enemigo.reset()
+                enemigos = []
                 player.proximo_nivel(map)
                 player = Jugador(diccionario_animaciones_jugador,(map.start_x,map.start_y - 10),(40,40),7)
                 player.vidas = vidas
                 player.score = puntaje
-                for i in range(nivel):
-                    enemigo = Enemigo(diccionario_animaciones_enemigo,(map.enemy_start_x,map.enemy_start_y),(75,50),3, "run",(map.enemy_start_x-30,map.enemy_start_x+80))
+                for enemigo_start in map.enemies_start:
+                    enemigos.append(Enemigo(diccionario_animaciones_enemigo,(enemigo_start),(75,50),3, "run",(enemigo_start[0]-ENEMY_RANGE,enemigo_start[0]+ENEMY_RANGE)))
                 llave = Llave(diccionario_animaciones_llave,(map.key_x,map.key_y),(40,40))
                 cofre = Cofre(diccionario_animaciones_cofre,(map.chest_x,map.chest_y),(40,40),"locked")
 

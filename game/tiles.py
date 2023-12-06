@@ -16,6 +16,7 @@ class TileMap():
     def __init__(self, filename):
         self.title_size = 32
         self.start_x, self.start_y = 0,0
+        self.enemies_start = []
         self.tiles = self.load_tiles(filename)
         self.map_surface = pygame.Surface((self.map_w, self.map_h))
         self.map_surface.set_colorkey((0,0,0))
@@ -51,7 +52,8 @@ class TileMap():
                 elif tile == "C":
                     self.chest_x, self.chest_y = x* self.title_size, y * self.title_size
                 elif tile =="E":
-                    self.enemy_start_x, self.enemy_start_y = x* self.title_size, y* self.title_size
+                    enemy_start_x, enemy_start_y = x* self.title_size, y* self.title_size
+                    self.enemies_start.append((enemy_start_x,enemy_start_y))
                 elif tile != '-1':
                     tiles.append(Tile(f"{TILES_TERRAIN_URI}/{tile}.png", x * self.title_size, y * self.title_size))
                 x += 1

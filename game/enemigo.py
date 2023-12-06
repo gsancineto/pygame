@@ -17,7 +17,3 @@ class Enemigo(Personaje):
             self.rect.x += self.velocidad
         else:
             self.flag_direccion = "R"
-
-    def reset(self):
-        self.muerto = False
-        self.estado = "run"

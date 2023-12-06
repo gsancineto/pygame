@@ -14,4 +14,4 @@ class Sonido:
     def reproducir_musica(self):
         pygame.mixer.music.load(MUSIC_URI)
         pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(0.3)
+        pygame.mixer.music.set_volume(0.03)
